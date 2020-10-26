@@ -1,0 +1,65 @@
+---
+- name: zsh / tmux packages
+  apt:
+    name:
+      - zsh
+      - git
+      - tmux
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+- name: Cloning OhMyZsh
+  become: yes
+  become_user: "{{ item }}"
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: "~{{ item }}/.oh-my-zsh"
+    depth: 1
+    version: latest
+  with_items:
+    - "{{ user_zsh_list | default([]) }}"
+- name: ohmytmux Cloning
+  become: yes
+  become_user: "{{ item }}"
+  git:
+    repo: https://github.com/gpakosz/.tmux.git
+    dest: "~{{ item }}/.tmux"
+    depth: 1
+    version: latest
+  with_items:
+    - "{{ user_zsh_list | default([]) }}"
+- name: ohmytmux Symlink
+  become: yes
+  become_user: "{{ item }}"
+  file:
+    src: ~{{ item }}/.tmux/.tmux.conf
+    dest: ~{{ item }}/.tmux.conf
+    state: link
+  with_items:
+        - "{{ user_zsh_list | default([]) }}"
+- name: Permissions
+  become: yes
+  file:
+    path: "~{{ item }}/.oh-my-zsh"
+    mode: 0644
+    owner: "{{ item }}"
+    recurse: yes
+  with_items:
+    - "{{ user_zsh_list | default([]) }}"
+- name: ohmytmux Copy local config
+  become: yes
+  become_user: "{{ item }}"
+  copy:
+    src: ~{{ item }}/.tmux/.tmux.conf.local
+    dest: ~{{ item }}/.tmux.conf.local
+    mode: 0644
+    remote_src: yes
+  with_items:
+    - "{{ user_zsh_list | default([]) }}"
+- name: Default shell change
+  become: yes
+  user:
+    name: "{{ item }}"
+    shell: /bin/zsh
+  with_items:
+    - "{{ user_zsh_list | default([]) }}"

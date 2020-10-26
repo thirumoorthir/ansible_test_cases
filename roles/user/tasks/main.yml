@@ -1,0 +1,33 @@
+---
+- name: Create user accounts
+  user:
+    name: "{{ item }}"
+  with_items: "{{ user_list | default([]) }}"
+  notify:
+    - Delete password entry
+    - Force password creation
+- name: Add PubKey from ./config for users account
+  authorized_key:
+    user: "{{ item }}"
+    key: "{{ lookup('file', './config/'+ item + '.pub') }}"
+  with_items: "{{ user_list | default([]) }}"
+- name: Create sudoers accounts
+  user:
+    name: "{{ item }}"
+    groups: [sudo]
+  with_items: "{{ sudoer_list | default([]) }}"
+  notify:
+    - Delete password entry
+    - Force password creation
+- name: Add PubKey from ./config for sudoers account
+  authorized_key:
+    user: "{{ item }}"
+    key: "{{ lookup('file', './config/'+ item + '.pub') }}"
+  with_items: "{{ sudoer_list | default([]) }}"
+- name: Add user to sudoers
+  lineinfile:
+    dest=/etc/sudoers
+    regexp="{{ item }} ALL"
+    line="{{ item }} ALL=(ALL) ALL"
+    state=present
+  with_items: "{{ sudoer_list | default([]) }}"

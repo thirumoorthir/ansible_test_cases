@@ -1,0 +1,8 @@
+---
+- name: Example file
+  hosts: all
+  become: true
+  tasks:
+    - name: Update packages
+      apt:
+        update_cache: yes

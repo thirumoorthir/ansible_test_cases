@@ -1,0 +1,31 @@
+all:
+    vars:
+      ansible_python_interpreter: auto
+    hosts:
+      hostABC:
+        ansible_ssh_host: 1.2.3.4
+        user_list:
+          - user1
+        sudoer_list:
+          - user2
+        user_zsh_list:
+          - user3
+  
+      hostXYZ:
+        ansible_ssh_host: 5.6.7.8
+        user_list:
+          - user1
+        user_zsh_list:
+          - user3
+base:
+    hosts:
+     hostABC: {}
+     hostXYZ: {}
+docker:
+    hosts:
+     hostXYZ: {}
+  # This is an example of grouping other groups
+developers:
+    children:
+      base:
+      docker:

@@ -1,0 +1,5 @@
+---
+- name: Restart ssh
+  service: name=ssh state=restarted
+  ignore_unreachable: True
+  ignore_errors: True

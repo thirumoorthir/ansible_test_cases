@@ -1,0 +1,8 @@
+---
+- name: Base setup
+  hosts: all
+  remote_user: root
+  roles:
+    - base
+    - user
+    - shell

@@ -1,0 +1,12 @@
+---
+- name: Fix empty lists
+  set_fact:
+    user_list: "{{ ( user_list | default([]) ) }}"
+    sudoer_list: "{{ ( sudoer_list | default([]) ) }}"
+- name: Merge lists
+  set_fact:
+    user_list: "{{ ( user_list and sudoer_list  ) }}"
+- name: show normal users
+  debug: msg="{{ user_list }}"
+- name: show sudoers users
+  debug: msg="{{ sudoer_list }}"

@@ -1,0 +1,9 @@
+---
+- name: Delete password entry
+  command: passwd -d {{ item.name }}
+  when: item.changed and item.system is defined and not item.system
+  with_items: "{{ users_added.results | default([]) }}"
+- name: Force password creation
+  command: chage -d 0 {{ item.name }}
+  when: item.changed and item.system is defined and not item.system
+  with_items: "{{ users_added.results | default([]) }}"

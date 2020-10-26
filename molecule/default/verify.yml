@@ -1,0 +1,11 @@
+---
+- name: Check if user exist
+  hosts: all
+  tasks:
+    - name: User test
+      stat:
+        path: /home/ausertest
+      register: user
+    - debug:
+        msg: "The user don't exist"
+      when: not user.stat.exists

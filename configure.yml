@@ -1,0 +1,13 @@
+---
+- name: Base setup
+  hosts: base
+  remote_user: root
+  roles:
+    - user
+    - base
+    - shell
+- name: Docker setup
+  hosts: docker
+  remote_user: root
+  roles:
+    - docker

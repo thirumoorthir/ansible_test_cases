@@ -1,0 +1,35 @@
+---
+name: Ansible role test
+'on':
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Environment setup
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro:
+          - ubuntu2004
+
+    steps:
+      - name: Code check
+        uses: actions/checkout@v2
+
+      - name: Python installation
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Modules installation
+        run: pip3 install molecule molecule-docker yamllint ansible-lint
+
+      - name: Molecule test
+        run: make test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_DISTRO: ${{ matrix.distro }}
