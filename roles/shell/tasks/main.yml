@@ -15,7 +15,7 @@
     repo: https://github.com/robbyrussell/oh-my-zsh.git
     dest: "~{{ item }}/.oh-my-zsh"
     depth: 1
-    version: latest
+#    version: latest
   with_items:
     - "{{ user_zsh_list | default([]) }}"
 - name: ohmytmux Cloning
@@ -25,7 +25,7 @@
     repo: https://github.com/gpakosz/.tmux.git
     dest: "~{{ item }}/.tmux"
     depth: 1
-    version: latest
+#    version: latest
   with_items:
     - "{{ user_zsh_list | default([]) }}"
 - name: ohmytmux Symlink

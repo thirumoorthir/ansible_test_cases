@@ -22,3 +22,10 @@ test:
 	yamllint .
 	ansible-lint
 	MOLECULE_DISTRO=$(MOLECULE_DISTRO) molecule test
+
+converge:
+	MOLECULE_DISTRO=$(MOLECULE_DISTRO) molecule converge
+
+verify: 
+	MOLECULE_DISTRO=$(MOLECULE_DISTRO) molecule verify 
+

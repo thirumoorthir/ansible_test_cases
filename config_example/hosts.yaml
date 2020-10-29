@@ -6,6 +6,8 @@ all:
         ansible_ssh_host: 1.2.3.4
         user_list:
           - user1
+          - user2
+          - user3 
         sudoer_list:
           - user2
         user_zsh_list:

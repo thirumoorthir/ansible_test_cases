@@ -1,11 +1,21 @@
 ---
-- name: Check if user exist
-  hosts: all
+- hosts: all
   tasks:
-    - name: User test
+    - include_vars: ../../config/vars.yml
+    - name: User Creation check 
       stat:
-        path: /home/ausertest
-      register: user
+        path: /home/"{{ item }}"
+      with_items: "{{ user_list }}"
+      register: user_check
+
     - debug:
-        msg: "The user don't exist"
-      when: not user.stat.exists
+        msg: "some users don't exist"
+      when: not item.stat.exists
+      with_items: "{{ user_list }}"
+    # - debug:
+    #     msg: 'Some users  are not created'
+    #   with_items: "{{ user_check.results }}"
+    #   when:  item.stat.exists
+
+    - name: "Make sure OSfamily is not RedHat"
+      assert: { that: "ansible_os_family != 'RedHat'" }
